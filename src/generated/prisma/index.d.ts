@@ -2397,7 +2397,7 @@ export namespace Prisma {
     description: string
     date: Date
     location: string
-    maxParticipants: number
+    maxParticipants: number | null
     _count: EventCountAggregateOutputType | null
     _avg: EventAvgAggregateOutputType | null
     _sum: EventSumAggregateOutputType | null
@@ -2476,7 +2476,7 @@ export namespace Prisma {
       description: string
       date: Date
       location: string
-      maxParticipants: number
+      maxParticipants: number | null
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -4619,7 +4619,7 @@ export namespace Prisma {
     description?: StringFilter<"Event"> | string
     date?: DateTimeFilter<"Event"> | Date | string
     location?: StringFilter<"Event"> | string
-    maxParticipants?: IntFilter<"Event"> | number
+    maxParticipants?: IntNullableFilter<"Event"> | number | null
     participants?: ParticipantListRelationFilter
   }
 
@@ -4629,7 +4629,7 @@ export namespace Prisma {
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
-    maxParticipants?: SortOrder
+    maxParticipants?: SortOrderInput | SortOrder
     participants?: ParticipantOrderByRelationAggregateInput
   }
 
@@ -4642,7 +4642,7 @@ export namespace Prisma {
     description?: StringFilter<"Event"> | string
     date?: DateTimeFilter<"Event"> | Date | string
     location?: StringFilter<"Event"> | string
-    maxParticipants?: IntFilter<"Event"> | number
+    maxParticipants?: IntNullableFilter<"Event"> | number | null
     participants?: ParticipantListRelationFilter
   }, "id">
 
@@ -4652,7 +4652,7 @@ export namespace Prisma {
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
-    maxParticipants?: SortOrder
+    maxParticipants?: SortOrderInput | SortOrder
     _count?: EventCountOrderByAggregateInput
     _avg?: EventAvgOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
@@ -4669,7 +4669,7 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"Event"> | string
     date?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     location?: StringWithAggregatesFilter<"Event"> | string
-    maxParticipants?: IntWithAggregatesFilter<"Event"> | number
+    maxParticipants?: IntNullableWithAggregatesFilter<"Event"> | number | null
   }
 
   export type ParticipantWhereInput = {
@@ -4693,6 +4693,7 @@ export namespace Prisma {
 
   export type ParticipantWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    eventId_userId?: ParticipantEventIdUserIdCompoundUniqueInput
     AND?: ParticipantWhereInput | ParticipantWhereInput[]
     OR?: ParticipantWhereInput[]
     NOT?: ParticipantWhereInput | ParticipantWhereInput[]
@@ -4700,7 +4701,7 @@ export namespace Prisma {
     userId?: IntFilter<"Participant"> | number
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "eventId_userId">
 
   export type ParticipantOrderByWithAggregationInput = {
     id?: SortOrder
@@ -4784,7 +4785,7 @@ export namespace Prisma {
     description: string
     date: Date | string
     location: string
-    maxParticipants: number
+    maxParticipants?: number | null
     participants?: ParticipantCreateNestedManyWithoutEventInput
   }
 
@@ -4794,7 +4795,7 @@ export namespace Prisma {
     description: string
     date: Date | string
     location: string
-    maxParticipants: number
+    maxParticipants?: number | null
     participants?: ParticipantUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -4803,7 +4804,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
-    maxParticipants?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     participants?: ParticipantUpdateManyWithoutEventNestedInput
   }
 
@@ -4813,7 +4814,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
-    maxParticipants?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
     participants?: ParticipantUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -4823,7 +4824,7 @@ export namespace Prisma {
     description: string
     date: Date | string
     location: string
-    maxParticipants: number
+    maxParticipants?: number | null
   }
 
   export type EventUpdateManyMutationInput = {
@@ -4831,7 +4832,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
-    maxParticipants?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type EventUncheckedUpdateManyInput = {
@@ -4840,7 +4841,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
-    maxParticipants?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ParticipantCreateInput = {
@@ -5032,6 +5033,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type EventCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -5083,6 +5095,22 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
   export type EventScalarRelationFilter = {
     is?: EventWhereInput
     isNot?: EventWhereInput
@@ -5091,6 +5119,11 @@ export namespace Prisma {
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
+  }
+
+  export type ParticipantEventIdUserIdCompoundUniqueInput = {
+    eventId: number
+    userId: number
   }
 
   export type ParticipantCountOrderByAggregateInput = {
@@ -5197,6 +5230,14 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type ParticipantUpdateManyWithoutEventNestedInput = {
@@ -5391,6 +5432,33 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ParticipantCreateWithoutUserInput = {
     event: EventCreateNestedOneWithoutParticipantsInput
   }
@@ -5475,7 +5543,7 @@ export namespace Prisma {
     description: string
     date: Date | string
     location: string
-    maxParticipants: number
+    maxParticipants?: number | null
   }
 
   export type EventUncheckedCreateWithoutParticipantsInput = {
@@ -5484,7 +5552,7 @@ export namespace Prisma {
     description: string
     date: Date | string
     location: string
-    maxParticipants: number
+    maxParticipants?: number | null
   }
 
   export type EventCreateOrConnectWithoutParticipantsInput = {
@@ -5528,7 +5596,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
-    maxParticipants?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type EventUncheckedUpdateWithoutParticipantsInput = {
@@ -5537,7 +5605,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
-    maxParticipants?: IntFieldUpdateOperationsInput | number
+    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type UserUpsertWithoutParticipantsInput = {

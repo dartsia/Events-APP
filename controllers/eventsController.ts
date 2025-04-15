@@ -85,10 +85,15 @@ const deleteEvent = async (req: Req, res: Res): Promise<void> => {
 
 const getSpecificEvent = async (req: Req, res: Res): Promise<void> => {
     const { name } = req.query;
-    
+
     try {
         const event = await prisma.event.findFirst({
-            where: { name: String(name) }
+            where: {
+                name: {
+                    equals: String(name).trim(),
+                    mode: 'insensitive',
+                }
+            }
         });
     
         if (!event) {
