@@ -20,9 +20,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth', authRouter);
+app.use('/', eventRouter);
 
 app.use(verifyJWT);
-app.use('/', eventRouter);
 app.use('/participate', registerRouter);
 
 app.listen(PORT, () => {

@@ -51,8 +51,6 @@ paths:
       summary: Get all existing events
       tags:
         - Events
-      security:
-        - cookieAuth: []
       responses:
         '200':
           description: Events list
@@ -161,8 +159,6 @@ paths:
       summary: Find event by name
       tags:
         - Events
-      security:
-        - cookieAuth: []
       parameters:
         - name: name
           in: query
