@@ -1,5 +1,6 @@
 import express from 'express';
 import { handleLogin, handleRegister, handleLogout } from '../controllers/authController';
+import { handleRefreshToken } from '../controllers/refreshTokenController';
 import { body } from 'express-validator';
 
 const router = express.Router();
@@ -15,6 +16,8 @@ router.post(
 );
 
 router.post('/login', handleLogin);
+
+router.post('/refresh', handleRefreshToken);
 
 router.post('/logout', handleLogout);
 
