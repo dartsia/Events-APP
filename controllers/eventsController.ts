@@ -44,6 +44,14 @@ const updateEvent = async (req: Req, res: Res): Promise<void> => {
     const { id } = req.params;
     const { name, description, date, location, maxParticipants } = req.body;
     
+    const event = await prisma.event.findFirst({
+        where: { id: Number(id) }
+    });
+    if (!event) {
+        res.status(404).json({ message: 'Event not found' });
+        return;
+    }
+
     try {
         const updatedEvent = await prisma.event.update({
             where: { id: Number(id) },

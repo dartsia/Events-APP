@@ -1,0 +1,305 @@
+openapi: 3.0.3
+info:
+  title: Events registration API
+  description: API for registering and managing events
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+        location:
+          type: string
+        maxParticipants:
+          type: integer
+    Auth:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+
+securitySchemes:
+  cookieAuth:
+    type: apiKey
+    in: cookie
+    name: jwt
+
+paths:
+  /events:
+    get:
+      summary: Get all existing events
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Events list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '401':
+          description: Not authorized
+        '500':
+          description: Internal Server Error
+  /create-event:
+    post:
+      summary: Create a new event
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+                  format: date-time
+                location:
+                  type: string
+                maxParticipants:
+                  type: integer
+      responses:
+        '201':
+          description: Event created succesfully
+        '400':
+          description: Title, description, date, and location are required
+        '401':
+          description: Not authorized
+        '500':
+          description: Internal Server Error
+  /update-event/{id}:
+    put:
+      summary: Update event by id
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer        
+      requestBody:
+        description: Update an existing event
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+                  format: date-time
+                location:
+                  type: string
+                maxParticipants:
+                  type: integer
+      responses:
+        '200':
+          description: Event updated succesfully
+        '404':
+          description: Event not found in the database
+        '500':
+          description: Internal Server Error
+  /delete-event/{id}:
+    delete:
+      summary: Delete an event
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Task deleted successfully
+        '500':
+          description: Internal Server Error
+  /find-event:
+    get:
+      summary: Find event by name
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event and its details
+        '404':
+          description: Event not found in the database
+        '500':
+          description: Internal Server Error
+  /my-events:
+    get:
+      summary: Display all events that the user has registered for
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Events list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '500':
+          description: Internal Server Error
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+        '409':
+          description: User already exists
+        '500':
+          description: Internal Server Error
+  /auth/login:
+    post:
+      summary: Login user
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Bad request
+        '401':
+          description: Invalid credentials
+        '500':
+          description: Internal Server Error
+  /auth/refresh:
+    get:
+      summary: Refresh access token from refresh token
+      tags:
+        - Auth
+      responses:
+      '200':
+        description: New access token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+      '401':
+        description: No refresh token in cookie
+      '403':
+        description: Refresh token is not valid or is expired
+      '500':
+        description: Internal Server Error
+      security:
+        - cookieAuth: []
+  /auth/logout:
+    get:
+      summary: User's logout
+      tags:
+        - Auth
+      responses:
+        '204':
+          description: Succesfull logout or refresh token not found
+        '500':
+          description: Internal Server Error
+    security:
+      - cookieAuth: []
+  /participate/register/{id}:
+    post:
+      summary: Register for an event
+      tags:
+        - Events
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: User registered for the event successfully
+        '400':
+          description: Event is full
+        '401':
+          description: Not authorized
+        '404':
+          description: Event not found in the database
+        '409':
+          description: User already registered for the event
+        '500':
+          description: Internal Server Error
