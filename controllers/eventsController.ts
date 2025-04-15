@@ -108,10 +108,32 @@ const getSpecificEvent = async (req: Req, res: Res): Promise<void> => {
     }
 }
 
+const showUserEvents = async (req: Req, res: Res): Promise<void> => {
+    const userId = req.user?.id || req.body.user_id;
+
+    try {
+        const events = await prisma.event.findMany({
+            where: {
+                participants: {
+                    some: {
+                        userId: Number(userId),
+                    }
+                }
+            }
+        });
+
+        res.status(200).json(events);
+    } catch (err: any) {
+        console.error('Error fetching user events:', err.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 export default {
     createEvent,
     getAllEvents,
     updateEvent,
     deleteEvent,
-    getSpecificEvent
+    getSpecificEvent,
+    showUserEvents
 }

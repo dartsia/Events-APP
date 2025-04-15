@@ -20,9 +20,11 @@ const registerForEvent = async (req: Req, res: Res): Promise<void> => {
     }
 
     const count = await prisma.participant.count({ where: { eventId } });
-    if (count >= event.maxParticipants!) {
-        res.status(400).json({ message: "Event is full" });
-        return;
+    if (event.maxParticipants != null) {
+        if (count >= event.maxParticipants!) {
+            res.status(400).json({ message: "Event is full" });
+            return;
+        }
     }
 
 
@@ -39,8 +41,14 @@ const registerForEvent = async (req: Req, res: Res): Promise<void> => {
             registration,
         });
     } catch (err: any) {
-        console.error('Registration error:', err.message);
-        res.status(500).json({ message: 'Internal server error' });
+        if (err.code === 'P2002') {
+            res.status(409).json({
+                message: 'You have already registered for this event!',
+            });
+        } else {
+            console.error('Registration error:', err.message);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 }
 
