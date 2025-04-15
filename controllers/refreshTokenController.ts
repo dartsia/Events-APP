@@ -1,6 +1,13 @@
 import { Request, Response } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { getUserByRefreshToken } from '../models/userService';
+import jwt from 'jsonwebtoken';
+import prisma from '../src/prismaClient';
+
+const getUserByRefreshToken = async (refreshToken: string) => {
+    const user = await prisma.user.findFirst({
+        where: { refreshToken },
+      });
+    return user;      
+};
 
 export const handleRefreshToken = async (req: Request, res: Response): Promise<void> => {
     const cookies = req.cookies;
